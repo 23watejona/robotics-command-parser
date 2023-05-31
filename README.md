@@ -23,7 +23,7 @@ You are responsible for returning a valid command
 Note: single-line comments, all beginning and trailing whitespace, and newlines will be stripped in the output
 Note: you must also provide the 
 Example:
-*
+**
 sampleJavaMethod()
 	java\*{
 		if(doThis){
@@ -32,7 +32,7 @@ sampleJavaMethod()
 			return new otherJavaCommand();
 		}
 	}\*
-*
+**
 
 ### Command Structures
 
