@@ -1,5 +1,6 @@
 # ROBOTICS COMMAND STRUCTURE GENERATOR
 # AUTHOR: Jonathan Waters
+## Thanks to @Gold856 for helping fix this README
 
 The purpose of this package is to allow for easier/more human-readable command structuring for the Command Based Java template of the FRC competition.  
 Using Python style indentation, it removes much of the boilerplate Java required to generate command structures.  
