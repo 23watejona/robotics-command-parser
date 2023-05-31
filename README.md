@@ -23,16 +23,16 @@ You are responsible for returning a valid command
 Note: single-line comments, all beginning and trailing whitespace, and newlines will be stripped in the output
 Note: you must also provide the 
 Example:
-**
+```
 sampleJavaMethod()
-	java\*{
+	java*{
 		if(doThis){
 			return new oneJavaCommand();
 		}else{
 			return new otherJavaCommand();
 		}
-	}\*
-**
+	}*
+```
 
 ### Command Structures
 
@@ -46,7 +46,7 @@ Structures are the built-in command-based structures from WPILib: SequentialComm
 In the scripting language, each of these is broken down to a more readable name, respectively: sequential, parallel, parallelRace, and parallelDeadline
 To place commands, structures, or methods, within a structure, simply place them indented underneath, like in python
 Example:
-*
+```
 sampleStructureMethod
 	sequential
 		doOneCommand
@@ -55,7 +55,7 @@ sampleStructureMethod
 			doThis
 			andThis
 			atTheSameTime
-*
+```
 
 #### Commands
 These are the team-specific commands you have written, and will be given a more human-readable name(more on this later)
@@ -66,12 +66,12 @@ Types:
 2. anything, with or without spaces, contained within braces {}
 
 Example:
-*
+```
 sampleStructureAndCommandMethod
 	sequential
 		humanReadableCommand 100000 stringParameter {any random text I might need :)}
 		otherHumanReadableCommand
-*
+```
 
 #### Methods
 While self-referencing methods defined in the script is not automatically allowed, you can define scripting names for them
@@ -91,12 +91,12 @@ To generate a grammar, the function accepts 2 parameters, both of which are JSON
 ### The Command List
 Each command is defined as an entry in the JSON, see below for format, anything surrounded by a star you must define
 
-*
+```
 {
-"\*FullLegalJavaName\*":{
-	"name": "\*name you want to use for scripting\*"
+"*FullLegalJavaName*":{
+	"name": "*name you want to use for scripting*"
 	
 	
 }
 }
-*
+```
