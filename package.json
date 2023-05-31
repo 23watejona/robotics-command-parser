@@ -1,0 +1,16 @@
+{
+  "name": "robotics-command-parser",
+  "version": "1.0.0",
+  "description": "Defines a scripting language for structuring FRC Command Based structures in a human readable format. Generates a parser and parses this language.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --trace-uncaught test/test.js",
+	"start": "node index.js"
+  },
+   "dependencies":{
+	"pegjs": "^0.10.0"
+  },
+  "author": "Jonathan Waters",
+  "license": "ISC"
+}

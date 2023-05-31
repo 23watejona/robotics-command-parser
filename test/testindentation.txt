@@ -1,0 +1,122 @@
+createArmScoreCommand(ArmPosition armPosition)
+INDENT
+java*{double[] coordinates = ForwardKinematicsTool.getArmPosition(ArmSubsystem.get().getLowerArmAngle(),ArmSubsystem.get().getUpperArmAngle());boolean isArmForwards = coordinates[0] > 0;if (isArmForwards){if (armPosition != ArmPosition.MEDIUM_BACK && armPosition != ArmPosition.HIGH_BACK){return new ArmScoreCommand(armPosition);} else{return new SequentialCommandGroup(new ArmScoreAutoCommand(ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE),new ArmScoreCommand(armPosition));}} else{if (armPosition == ArmPosition.MEDIUM_BACK || armPosition == ArmPosition.HIGH_BACK){return new ArmScoreCommand(armPosition);} else{return new SequentialCommandGroup(new ArmScoreAutoCommand(ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE),new ArmScoreCommand(armPosition));}}
+DEDENT
+getScoreThenLeaveCommand
+INDENT
+sequential
+INDENT
+ensurePreload
+armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE
+armAuto ArmScoreAutoCommand.ArmPosition.HIGH_BACK
+outtakePiece
+armAuto ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE
+armAuto ArmScoreAutoCommand.ArmPosition.POCKET
+driveDistance 4
+DEDENT
+DEDENT
+getJustLeaveCommand
+INDENT
+sequential
+INDENT
+driveDistance 4
+DEDENT
+DEDENT
+getOverTheFulcrumNoScoreAuto
+INDENT
+sequential
+INDENT
+driveDistance -0.2
+driveTime -0.6 500
+driveTime -0.25 2500
+driveTime 0.55 750
+balance
+DEDENT
+DEDENT
+getTwoScoreRedWireBumpAuto
+INDENT
+sequential
+INDENT
+gripper WheelGripperPosition.STOP
+sequential
+INDENT
+armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE
+armAuto ArmScoreAutoCommand.ArmPosition.HIGH_BACK with timeout 1.5
+DEDENT
+outtakePiece
+parallelRace
+INDENT
+sequential
+INDENT
+armAuto ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE
+pickupPiece
+DEDENT
+sequential
+INDENT
+wait 0.25
+sequential
+INDENT
+driveTime 0.4 1650
+wait 0.2
+autoAlign {new Pose(1.86,-2.75,Math.toRadians(178))} 0.1 1 with timeout 5
+DEDENT
+DEDENT
+DEDENT
+turnRelative -2
+parallel
+INDENT
+gripper WheelGripperPosition.INTAKE_CUBE_W_SENSOR
+sequential
+INDENT
+driveTime -0.6 2250
+wait 0.1
+autoAlign {new Pose(6.3,-2.63,Math.PI)} 0.1 2 with timeout 3
+DEDENT
+sequential
+INDENT
+armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE
+armAuto ArmScoreAutoCommand.ArmPosition.MEDIUM_BACK with timeout 1.5
+DEDENT
+DEDENT
+outtakePiece
+armAuto ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE
+armAuto ArmScoreAutoCommand.ArmPosition.POCKET
+DEDENT
+DEDENT
+getPickupPieceCommand
+INDENT
+parallel
+INDENT
+sequential
+INDENT
+armAuto ArmScoreAutoCommand.ArmPosition.LOW_AUTO
+armAuto ArmScoreAutoCommand.ArmPosition.HOLD
+DEDENT
+gripper WheelGripperPosition.INTAKE_CUBE_W_SENSOR
+DEDENT
+DEDENT
+getEnsurePreloadCommand
+INDENT
+sequential
+INDENT
+gripper WheelGripperPosition.INTAKE_CUBE_W_SENSOR with timeout 0.5
+gripper WheelGripperPosition.STOP
+DEDENT
+DEDENT
+getOuttakePieceCommand
+INDENT
+sequential
+INDENT
+gripper WheelGripperPosition.OUTTAKE
+wait 0.5
+gripper WheelGripperPosition.STOP
+DEDENT
+DEDENT
+getALittleCloser()
+INDENT
+java*{double limelightz = Math.abs(AprilTagSubsystem.get().m_z);double limelightYaw = Math.toRadians(-AprilTagSubsystem.get().m_yaw);double limelightx = AprilTagSubsystem.get().m_x;double targetz = limelightz / 2;double distanceToTarget = Math.sqrt(Math.pow(limelightx,2) + Math.pow(targetz,2));double angleToTarget = Math.atan2(targetz,limelightx);double turnAngle1 = Math.PI / 2 - (angleToTarget + limelightYaw);double turnAngle2 = -1 * (turnAngle1 + limelightYaw);SmartDashboard.putNumber("distanceToTarget",distanceToTarget);SmartDashboard.putNumber("angleToTarget",Math.toDegrees(angleToTarget));SmartDashboard.putNumber("turnAngle1",Math.toDegrees(turnAngle1));SmartDashboard.putNumber("turnAngle2",Math.toDegrees(turnAngle2));return new SequentialCommandGroup(new TurnCommand(Math.toDegrees(turnAngle1)),new DriveDistanceCommand(-distanceToTarget - 0.2).withTimeout(1.5),new TurnCommand(Math.toDegrees(turnAngle2)));
+DEDENT
+getAnvitaAuto()
+INDENT
+java*{return new DeferredCommandAuto(() -> getALittleCloser());
+DEDENT
