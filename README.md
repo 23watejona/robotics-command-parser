@@ -13,6 +13,7 @@ At the top level of indentation, you can define a method using any legal java me
 Indenting in from there, we start to define the command structure for that method. This can take 2 forms:
 1. pure-java Method
 2. command structure
+
 You may only use 1 of these per method.
 
 ### Java Methods
