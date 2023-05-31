@@ -90,12 +90,18 @@ To generate a grammar, the function accepts 2 parameters, both of which are JSON
 2. A Function(Method) List
 
 ### The Command List
-Each command is defined as an entry in the JSON, see below for format, anything surrounded by a star you must define
-
-```
-{
-	"*FullLegalJavaName*": {
-		"name": "*name you want to use for scripting*"
-	}
-}
-```
+Each command is defined as an entry in the JSON Command List
+The key for the command entry is the full name of the command
+The command entry is an object with entries as follows
+- Required
+  - name
+    : The name you would like to use for scripting
+  - parameters
+    : An object with each entry relating to a parameter for the command, each is labeled as 'p{which parameter number it is}', starting at 1
+    - entries in each parameter object - while this is not strictly required to be populated, I strongly recommend that you do
+		- name
+          : name of the parameter
+		- description
+		   : longer description of what it is
+		- type
+		   : the type of parameter it is eg:number/javaObject/*select*
