@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --trace-uncaught test/test.js",
+    "test": "node --trace-uncaught test/test.js"
   },
    "dependencies":{
 	"pegjs": "^0.10.0"
