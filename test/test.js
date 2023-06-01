@@ -1,13 +1,37 @@
 import index from '../index.js'
-import indentParser from '../parseIndentation.js'
 import fs from 'fs'
 import assert from 'assert'
 
-let generatedGrammar = index.generateGrammar(fs.readFileSync("./test/testcommandlist.json"), fs.readFileSync("./test/testfunctionlist.json"))
-assert(generatedGrammar == fs.readFileSync('./test/commandGrammar.pegjs').toString(), "Generated Command Grammar does not match expected Command Grammar")
+//generate a grammar from our command and function lists
+let generatedGrammar = index.generateGrammar(
+	fs.readFileSync("./test/testCommandList.json"), 
+	fs.readFileSync("./test/testFunctionList.json"))
+	
+//make sure that our grammar matches what we expect
+assert(
+	generatedGrammar == fs.readFileSync('./test/expectedCommandGrammar.pegjs').toString(), 
+	"Generated Command Grammar does not match expected Command Grammar")
+
+//set the grammar so we can use it to parse
 index.setGrammar(generatedGrammar)
-let indentParsed = indentParser.parse(fs.readFileSync('./test/script.txt').toString())
-assert(indentParsed == fs.readFileSync('./test/testindentation.txt'))
-let parsed = index.parse("CommandComposer", fs.readFileSync('./test/script.txt').toString(),  fs.readFileSync('./test/script.txt').toString())
-assert(parsed == fs.readFileSync("./test/expectedoutput.txt"), "Parsed output does not match expected output")
+
+//preprocess script
+let preprocessed = index.preprocess(fs.readFileSync('./test/testScript.txt').toString())
+
+//make sure the output of parsing for indentation is what we expect
+assert(
+	preprocessed == fs.readFileSync('./test/expectedIndentationOutput.txt'),
+	"Preprocessed indentation does not match indentation")
+
+//parse our final output from our script(x2)
+let parsed = index.parse(
+	"CommandComposer", 
+	fs.readFileSync('./test/testScript.txt').toString(),  
+	fs.readFileSync('./test/testScript.txt').toString())
+
+//make sure the final output matches what is expected
+assert(
+	parsed == fs.readFileSync("./test/expectedFinalOutput.txt"), 
+	"Parsed output does not match expected output")
+
 console.log("Output is correct!")

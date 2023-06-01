@@ -83,30 +83,38 @@ newline'new line' = "\\n" { return ""}`
 }
 
 function createCommandToken(commandFullName, commandObject){
+	
+	//generate a command token based on the template
 	let scriptingName = commandObject.name
 	let parameters = Object.keys(commandObject.parameters)
 	
+	
+	//format = p1:p etc
 	let firstLineParameters = parameters.map((x)=>{
 		return x + ":p"
 	})
 	
+	//format ends up as +p... for each
 	let returnParameters = parameters.map((x)=>{
-		return "+" + x + "+"
+		return "+" + x 
 	})
 	
+	//convert to text and change the delimiters between each of these items from commas to spaces
 	let firstLineParametersFormatted = firstLineParameters.toString().replaceAll(","," ")
-	let returnParametersFormatted = returnParameters.toString().replaceAll(",",'","')
+	
+	//convert to text and change the delimiters from , to +","
+	let returnParametersFormatted = returnParameters.toString().replaceAll(",",'+","')
 	
 	let commandToken = `${commandFullName} = newline "${scriptingName}" ${firstLineParametersFormatted}
 {
-	return "new ${commandFullName}("${returnParametersFormatted}")"
+	return "new ${commandFullName}("${returnParametersFormatted}+")"
 }
 `
-	commandToken = commandToken.replaceAll('""', '"+"')
 	return commandToken
 }
 
 function createFunctionToken(functionFullName, functionScriptingName){
+		//generate a function token based on the template
 	return `${functionFullName} = newline "${functionScriptingName}"
 {
 	return "${functionFullName}()"

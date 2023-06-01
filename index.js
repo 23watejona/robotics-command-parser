@@ -9,21 +9,24 @@ var parserCommand
 
 export function setGrammar(commandGrammar) {
     try {
-        //store text of grammars in local scope
-        //generate parsers from grammars and store in global scope
+        //generate parser from grammar and store in module scope
         parserCommand = pegjs.generate(commandGrammar)
     } catch (e) {
+		//error handling for grammar generation
+		//will come here if there are syntax errors in the grammar
 		console.error("FAILED TO SET GRAMMAR")
 		console.error(e)
-        //error handling
         e.location !== undefined ? "Line " + e.location.start.line + ", column " + e.location.start.column + ": " + e.message : e.message;
     }
 }
 
 
 export function generateGrammar(commandList, functionList) {
+	//parse the JSONs
 	commandList = JSON.parse(commandList)
 	functionList = JSON.parse(functionList)
+	
+	//Generate the grammar
 	return grammarGenerator.generateGrammar(commandList, functionList)
 }
 
@@ -33,7 +36,7 @@ export function parse(name, ...scripts) {
     //FORMAT: array of the static methods described in the script
     let parsedMethods = []
 	for(let script of scripts){
-		let indentParsedScript = parseIndent(script)
+		let indentParsedScript = preprocess(script)
 		parsedMethods = parsedMethods.concat(parseToCommands(indentParsedScript))
 	}
 	let res = `public class ${name}{`
@@ -44,24 +47,30 @@ export function parse(name, ...scripts) {
 	return res
 }
 
-export function parseIndent(script) {
-    //try {
-        //parse the script and convert changes in indentation to text tokens for next round of parsing
-        //It's very difficult to parse both indentation and everything else at the same time
+
+//preprocess the script to convert leading whitespace(indentation)
+//into text of "INDENT" or "DEDENT"
+//Also remove single line comments throughout the script
+//Multiline comments everywhere outside of javaBlocks
+//And all non-required whitespace within javaBlocks
+//This drastically simplifies what is necessary in the pegjs grammar
+//To actually generate the Java code later
+export function preprocess(script) {
+    try {
         var parsedScript = indentParser.parse(script)
-    //} catch (e) {
-        //Error handling: beware of line numbers - I'm not sure they're accurate
-    //    console.error("INDENTATION ERROR")
-	//	console.error(e)
-    //    return
-    //}
+    } catch (e) {
+        //Error handling
+        console.error("INDENTATION ERROR")
+		console.error(e)
+        return
+    }
     return parsedScript
 }
 
 export function parseToCommands(indentParsedScript) {
     try {
         //parse script into java commands
-        //NOTE: must be pre-parsed for indentation
+        //NOTE: must be preprocessed for indentation
         var parsedScript = parserCommand.parse(indentParsedScript)
     } catch (e) {
 
@@ -82,7 +91,7 @@ export function parseToCommands(indentParsedScript) {
 //export the function we want other people to be able to use
 export default {
     parse: parse,
-    parseIndent: parseIndent,
+    preprocess: preprocess,
     parseToCommands: parseToCommands,
     generateGrammar: generateGrammar,
     setGrammar: setGrammar
