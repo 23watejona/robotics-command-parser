@@ -3,9 +3,19 @@
 //Also takes in a list of all the functions we want to be able to parse for
 export function generateGrammar(commandList, functionList) {
 
+	let commandSection = ''
+	for (let i in commandList) {
+		commandSection += createCommandToken(i, commandList[i])
+    }
+	
+	let functionSection = ``
+    for (let i in functionList) {
+        functionSection += createFunctionToken(i, functionList[i])
+    }
+
   //The first large chunk of grammar is unchanged when we change the functions and commands
   //basically holds the larger structures, like sequentialCommandGroup etc., methods, and the file as a whole
-    let grammarStaticFirstHalf = `file = first:(function/javafunction)+
+    let generatedGrammar = `file = first:(function/javafunction)+
 {
 	return first
 }
@@ -37,13 +47,15 @@ parallelDeadline = newline s:"parallelDeadline"
 {
 	return "new ParallelDeadlineGroup"
 }
-command = first:(`
-
-
-//end of grammar also doesn't change when we change commands and methods
-//this section parses for the small items common to all commands and methods
-//like timeouts, parameters, indents, spaces, text and newlines
-    let grammarStaticSecondHalf = `timeout = space "with timeout" space p:text
+command = first:(${Object.keys(commandList).toString().replaceAll(",","/")}) t:timeout?
+{
+	return first + (t != null ? t : "")
+}
+${commandSection}f'function' = first:(${Object.keys(functionList).toString().replaceAll(",","/")}) t:timeout?
+{
+	return first + (t != null ? t : "")
+}
+${functionSection}timeout = space "with timeout" space p:text
 {
 	return ".withTimeout(" + p + ")"
 }
@@ -62,95 +74,42 @@ textnospace = s:[a-zA-Z0-9._-]* {return s.join("")}
 bracketed = "{" s:[^}]* "}" {return s.join("")}
 text = s:[^\\n]+ {return s.join("")}
 newline'new line' = "\\n" { return ""}`
-
-    //start off our generated grammar with the unchanged first section of the grammar
-    let grammarGenerated = grammarStaticFirstHalf
-
-    //this is to hold a list of the names of each command token
-    let l = ``
     
-    //this holds all of the actual tokens for commands
-    let commandTokens = ``
-  
-    let hasStarted = false
+    return generatedGrammar
+}
 
-    //for each command of the list
-    for (let i in commandList) {
-
-        //if we already have 1 command in the list, add a delimeter btw them
-        //this delimiter indicates that any of these tokens are interchangeable
-        //in the parsing of a wrapper token
-        if (hasStarted) {
-            l += "/"
-        }
-        //add the token name to the list
-        l += `${i}`
-
-        //indicate that at least one token has been added to the list
-        hasStarted = true
-
-        //add the intial part of the command token
-        commandTokens += `${i} = newline "${commandList[i].name}"`
-
-        //add each parameter to the command token
-        for (let j in commandList[i].parameters) {
-            commandTokens += ` ${j}:p`
-        }
-
-      //add each parameter to the return function,
-      //so that when it parses, the parameter ends up in the right place in the right format
-        commandTokens += `
+function createCommandToken(commandFullName, commandObject){
+	let scriptingName = commandObject.name
+	let parameters = Object.keys(commandObject.parameters)
+	
+	let firstLineParameters = parameters.map((x)=>{
+		return x + ":p"
+	})
+	
+	let returnParameters = parameters.map((x)=>{
+		return "+" + x + "+"
+	})
+	
+	let firstLineParametersFormatted = firstLineParameters.toString().replaceAll(","," ")
+	let returnParametersFormatted = returnParameters.toString().replaceAll(",",'","')
+	
+	let commandToken = `${commandFullName} = newline "${scriptingName}" ${firstLineParametersFormatted}
 {
-	return "new ${i}("`
-        let currParamNum = 1
-        for (let j in commandList[i].parameters) {
-            if (currParamNum != 1) {
-                commandTokens += `","`
-            }
-            commandTokens += `+${j}+`
-            currParamNum++
-        }
-        if (currParamNum == 1) {
-            commandTokens += "+"
-        }
-        commandTokens += `")"
-}`
-        commandTokens += "\n"
-    }
-    grammarGenerated += l
-    grammarGenerated += `) t:timeout?
-{
-	return first + (t != null ? t : "")
+	return "new ${commandFullName}("${returnParametersFormatted}")"
 }
 `
-    grammarGenerated += commandTokens
-    grammarGenerated += `f'function' = first:(`
-    l = ``
-    let functionTokens = ``
-    let hasRun = false
-    for (let i in functionList) {
-        if (hasRun) {
-            l += "/"
-        }
-        hasRun = true
-        l += `${functionList[i]}`
-        functionTokens += `${functionList[i]} = newline "${functionList[i]}"
-{
-	return "${i}()"
-}`
-        functionTokens += "\n"
-    }
-    grammarGenerated += l
-    grammarGenerated += `) t:timeout?
-{
-	return first + (t != null ? t : "")
-}
-`
-    grammarGenerated += functionTokens
-    grammarGenerated += grammarStaticSecondHalf
-    return grammarGenerated
+	commandToken = commandToken.replaceAll('""', '"+"')
+	//console.log(commandToken)
+	return commandToken
 }
 
+function createFunctionToken(functionFullName, functionScriptingName){
+	return `${functionFullName} = newline "${functionScriptingName}"
+{
+	return "${functionFullName}()"
+}
+`
+}
 
 export default {
 	generateGrammar: generateGrammar
