@@ -3,19 +3,23 @@
 //Also takes in a list of all the functions we want to be able to parse for
 export function generateGrammar(commandList, functionList) {
 
+	//generate all command tokens in order, and add them all to a string
+	//we will be adding this to the right spot in the template later
 	let commandSection = ''
 	for (let i in commandList) {
 		commandSection += createCommandToken(i, commandList[i])
     }
 	
+	//generate all function tokens in order, and add them all to a string
+	//we will be adding this to the right spot in the template later
 	let functionSection = ``
     for (let i in functionList) {
         functionSection += createFunctionToken(i, functionList[i])
     }
 
-  //The first large chunk of grammar is unchanged when we change the functions and commands
-  //basically holds the larger structures, like sequentialCommandGroup etc., methods, and the file as a whole
-    let generatedGrammar = `file = first:(function/javafunction)+
+	//generate the grammar from the template
+    let generatedGrammar = 
+`file = first:(function/javafunction)+
 {
 	return first
 }
@@ -99,7 +103,6 @@ function createCommandToken(commandFullName, commandObject){
 }
 `
 	commandToken = commandToken.replaceAll('""', '"+"')
-	//console.log(commandToken)
 	return commandToken
 }
 
