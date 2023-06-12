@@ -23,7 +23,7 @@ createArmScoreCommand(ArmPosition armPosition)
 		}
 	}*
 getScoreThenLeaveCommand 
-	sequential
+	sequ ential
 		ensurePreload
 		armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE
 		armAuto ArmScoreAutoCommand.ArmPosition.HIGH_BACK
@@ -31,6 +31,10 @@ getScoreThenLeaveCommand
 		armAuto ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE
 		armAuto ArmScoreAutoCommand.ArmPosition.POCKET
 		driveDistance 4
+/*
+akjfdlkasjflk
+aksdnlaksdlk
+*/
 getJustLeaveCommand 
 	sequential
 		driveDistance 4

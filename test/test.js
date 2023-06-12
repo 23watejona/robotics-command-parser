@@ -1,6 +1,6 @@
 import index from '../index.js'
 import fs from 'fs'
-import assert from 'assert'
+import assert from 'node:assert/strict';
 
 //generate a grammar from our command and function lists
 let generatedGrammar = index.generateGrammar(
@@ -17,6 +17,7 @@ index.setGrammar(generatedGrammar)
 
 //preprocess script
 let preprocessed = index.preprocess(fs.readFileSync('./test/testScript.txt').toString())
+fs.writeFileSync('./test/output.txt', preprocessed)
 
 //make sure the output of parsing for indentation is what we expect
 assert(
