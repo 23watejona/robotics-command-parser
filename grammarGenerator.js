@@ -2,21 +2,6 @@
 //Takes in a command list that has all the commands we want to parse for
 //Also takes in a list of all the functions we want to be able to parse for
 export function generateGrammar(commandList, functionList) {
-
-	//generate all command tokens in order, and add them all to a string
-	//we will be adding this to the right spot in the template later
-	let commandSection = ''
-	for (let i in commandList) {
-		commandSection += createCommandToken(i, commandList[i])
-    }
-	
-	//generate all function tokens in order, and add them all to a string
-	//we will be adding this to the right spot in the template later
-	let functionSection = ``
-    for (let i in functionList) {
-        functionSection += createFunctionToken(i, functionList[i])
-    }
-
 	//generate the grammar from the template
     let generatedGrammar = 
 `file = first:(function/javafunction)+
@@ -51,15 +36,28 @@ parallelDeadline = newline s:"parallelDeadline"
 {
 	return "new ParallelDeadlineGroup"
 }
-command = first:(${Object.keys(commandList).toString().replaceAll(",","/")}) t:timeout?
+command = first:(${Object.keys(commandList).join("/")}) t:timeout?
 {
 	return first + (t != null ? t : "")
 }
-${commandSection}f'function' = first:(${Object.keys(functionList).toString().replaceAll(",","/")}) t:timeout?
+${(()=>{
+	let res = ""
+	for (let i in commandList) {
+		res += createCommandToken(i, commandList[i])
+	}
+	return res
+})()
+}f'function' = first:(${Object.keys(functionList).join("/")}) t:timeout?
 {
 	return first + (t != null ? t : "")
 }
-${functionSection}timeout = space "with timeout" space p:text
+${(()=>{
+	let res =""
+	for (let i in functionList) {
+		res += createFunctionToken(i, functionList[i])
+	}
+	return res
+})()}timeout = space "with timeout" space p:text
 {
 	return ".withTimeout(" + p + ")"
 }
@@ -78,7 +76,6 @@ textnospace = s:[a-zA-Z0-9._-]* {return s.join("")}
 bracketed = "{" s:[^}]* "}" {return s.join("")}
 text = s:[^\\n]+ {return s.join("")}
 newline'new line' = "\\n" { return ""}`
-    
     return generatedGrammar
 }
 
@@ -100,10 +97,10 @@ function createCommandToken(commandFullName, commandObject){
 	})
 	
 	//convert to text and change the delimiters between each of these items from commas to spaces
-	let firstLineParametersFormatted = firstLineParameters.toString().replaceAll(","," ")
+	let firstLineParametersFormatted = firstLineParameters.join(" ")
 	
 	//convert to text and change the delimiters from , to +","
-	let returnParametersFormatted = returnParameters.toString().replaceAll(",",'+","')
+	let returnParametersFormatted = returnParameters.join('+","')
 	
 	let commandToken = `${commandFullName} = newline "${scriptingName}" ${firstLineParametersFormatted}
 {
