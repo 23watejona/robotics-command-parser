@@ -1,68 +1,39 @@
 export function parse(str, includeComments = false){
 	
-	//Things we want to break our input into, in order of processing
-	//javaBlocks: java*{CONTENT}*
-	// multi line comments
-	// new lines
-	//single line comments
-	//indents(leading whitespace)
-	//trailing whitespace
-	//everything else is grouped as text
 	let tokens = {
-		javaBlock: new RegExp(/java\*{((.|\s)*?)}\*/,'g'),
-		multiLineComment:/\/\*(.|\s)*?\*\//g,
-		newline: new RegExp(/(\n)|(\r\n)/,'g'),
-		singleLineComment: new RegExp(/\/\/[^\n]*/,'g'),
-		indent: new RegExp(/^\s*/,'g'),
-		trailingWhitespace:/\s+$/g,
-		text: new RegExp(/.+/,'g')
+		javaBlock: "java\\*{([\\s\\S]*?)}\\*",
+		multiLineComment: "\\/\\*[\\s\\S]*?\\*\\/",
+		singleLineComment: "\\/\\/[^\\n]*",
+		indent: "((?<=\\n)\\s+)|(^\\s+)",
+		trailingWhitespace:"\\s+(?=[\n])",
+		newline: "(\n)|(\r\n)",
+		text:"[^\\s]+"
 	}
 
 	//initialize an array to store our full output
-	let parsed = [str]
 
-	//initiealize an array to store the output of this step
-	let inProg = []
 	
-	//iterate over each of the tokens above
-	//separate it from the rest of the text it is with
-	//and store it as an object
-	for(let [token, expression] of Object.entries(tokens)){
-		for(let i = 0; i<parsed.length; ++i){
-			
-			//skip over stuff we've already parsed out, add it unchanged to the inProgress array
-			if(typeof(parsed[i]) == 'object'){
-				inProg.push(parsed[i])
-				continue;
-				
-			}else{ 
-				
-				//evaluate the current text for strings that match the expression for our tokens
-				//add the tokens into our inprogress array in the correct location, and leave everything else as text
-				let tokensParsed = parsed[i].match(expression);
-				let noTokens = parsed[i].replaceAll(expression, "^^^").split("^^^");
-				
-				//if no match, just push the string to our inProg array
-				if(tokensParsed == null){
-					inProg.push(parsed[i])
-					continue
-				}
-				
-				//otherwise, alternate between pushing the content and pushing tokens to our inProgress array
-				for(let j=0; j<noTokens.length-1; ++j){
-					if(noTokens[j] != ''){
-						inProg.push(noTokens[j])
-					}
-					inProg.push({tokenType:token, content:tokensParsed[j]})
-				}
-				if(noTokens[noTokens.length-1] != ''){
-					inProg.push(noTokens[noTokens.length-1])
-				}			
+	
+	
+	let groupArray = []
+
+	for (let [token, expression] of Object.entries(tokens)){
+		groupArray.push(`(?<${token}>${expression})`)
+	}
+
+	let m = new RegExp(groupArray.join("|"), 'g')
+
+	//console.log(m)
+	let parsed = []
+	for(let match of str.matchAll(m)){
+		//console.log(match.groups)
+		for(let [g,s] of Object.entries(match.groups)){
+			if(s != undefined){
+				parsed.push({tokenType:g, content:s})
 			}
 		}
-		parsed = inProg
-		inProg = []
 	}
+	//console.log(parsed)
 	let res = ""
 	let indentBuff = []
 	let lastIndent = ""
@@ -81,7 +52,11 @@ export function parse(str, includeComments = false){
 		//Once we know this, add an INDENT, DEDENT, or nothing, and then the text we
 		if(tokenType == "text"){
 			if(indentBuff.length > 0){
+				//console.log(content)
 				try{
+					//let a = []
+					//a.push(indentBuff[indentBuff.length-1], lastIndent)
+					//console.log(a)
 					res += processIndent(indentBuff[indentBuff.length-1], lastIndent) + "\n"
 				}catch(e){
 					console.error(e.message + " at line " + lineCount)
@@ -90,10 +65,10 @@ export function parse(str, includeComments = false){
 				lastIndent = indentBuff[indentBuff.length-1]
 				indentBuff = []
 			}
-			res += content + "\n" 
+			res += content + " " 
 		}else if(tokenType=="javaBlock"){
 			//Surround with indent/dedent, strip single-line comments, and replace all non-required whitespace
-			res+="INDENT\n"+content.replaceAll(/\/\/.*/g,"").replaceAll(/(\t|\n|\r)/g,"").replaceAll("}*","")+"\nDEDENT\n"		
+			res+="\nINDENT\n"+content.replaceAll(/\/\/.*/g,"").replaceAll(/(\t|\n|\r)/g,"").replaceAll("}*","")+"\nDEDENT\n"		
 		}else if(tokenType == "indent"){
 			//add the indent to our buffer
 			//it's done like this since not every indent is necessarily used in the final script
@@ -107,11 +82,14 @@ export function parse(str, includeComments = false){
 			indentBuff = []
 		}else if(tokenType == "newline"){
 			//just add a newline
+			indentBuff.push('')
 			lineCount += 1
+			res += "\n"
 		}
 	}
 	res += processIndent("", lastIndent) + "\n"
-	return res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,"")
+	//console.log(res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,""))
+	return res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,"").replaceAll(/\s*(?=\n)/g, "")
 }
 
 //compare current number of tabs to last number of tabs
@@ -139,6 +117,7 @@ function processIndent(currIndent, lastIndent){
 	}else{
 		res += "\n"
 	}
+	//console.log(res)
 	return res
 }
 
