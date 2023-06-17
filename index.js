@@ -72,6 +72,7 @@ export function parseToCommands(indentParsedScript) {
     try {
         //parse script into java commands
         //NOTE: must be preprocessed for indentation
+		console.log(indentParsedScript)
         var parsedScript = parserCommand.parse(indentParsedScript)
     } catch (e) {
 
