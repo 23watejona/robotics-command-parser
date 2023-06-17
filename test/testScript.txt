@@ -23,15 +23,14 @@ createArmScoreCommand(ArmPosition armPosition)
 		}
 	}*
 getScoreThenLeaveCommand 
-	sequ ential
+	sequential
 		ensurePreload
 		armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE
 		armAuto ArmScoreAutoCommand.ArmPosition.HIGH_BACK
 		outtakePiece
 		armAuto ArmScoreAutoCommand.ArmPosition.TO_FORWARD_INTERMEDIATE
 		armAuto ArmScoreAutoCommand.ArmPosition.POCKET
-		driveDistance 4
-/*
+		driveDistance 4/*
 akjfdlkasjflk
 aksdnlaksdlk
 */

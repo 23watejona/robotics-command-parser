@@ -6,8 +6,8 @@ export function parse(str, includeComments = false){
 		singleLineComment: "\\/\\/[^\\n]*",
 		indent: "((?<=\\n)\\s+)|(^\\s+)",
 		trailingWhitespace:"\\s+(?=[\n])",
-		newline: "(\n)|(\r\n)",
-		text:"[^\\s]+"
+		newline: "(\n)|(\r\n)"//,
+		//text:"[^\\s]+"
 	}
 
 	//initialize an array to store our full output
@@ -23,17 +23,21 @@ export function parse(str, includeComments = false){
 
 	let m = new RegExp(groupArray.join("|"), 'g')
 
-	//console.log(m)
-	let parsed = []
-	for(let match of str.matchAll(m)){
-		//console.log(match.groups)
+	let parsed = []	
+	let lastIndex = 0
+	let lastLength = 0
+	for(let match of str.matchAll(m)){	
+		if(match.index - (lastIndex+lastLength) != 0){
+			parsed.push({tokenType:'text', content:str.substring(lastIndex+lastLength, match.index)})
+		}
+		lastIndex = match.index
+		lastLength = match[0].length
 		for(let [g,s] of Object.entries(match.groups)){
 			if(s != undefined){
 				parsed.push({tokenType:g, content:s})
 			}
 		}
 	}
-	//console.log(parsed)
 	let res = ""
 	let indentBuff = []
 	let lastIndent = ""
@@ -88,7 +92,6 @@ export function parse(str, includeComments = false){
 		}
 	}
 	res += processIndent("", lastIndent) + "\n"
-	//console.log(res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,""))
 	return res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,"").replaceAll(/\s*(?=\n)/g, "")
 }
 

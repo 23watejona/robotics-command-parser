@@ -4,7 +4,7 @@ java*{double[] coordinates = ForwardKinematicsTool.getArmPosition(ArmSubsystem.g
 DEDENT
 getScoreThenLeaveCommand
 INDENT
-sequ ential
+sequential
 INDENT
 ensurePreload
 armAuto ArmScoreAutoCommand.ArmPosition.TO_BACK_INTERMEDIATE

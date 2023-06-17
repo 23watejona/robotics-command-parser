@@ -8,7 +8,7 @@ let generatedGrammar = index.generateGrammar(
 	fs.readFileSync("./test/testFunctionList.json"))
 	
 //make sure that our grammar matches what we expect
-assert(
+console.assert(
 	generatedGrammar == fs.readFileSync('./test/expectedCommandGrammar.pegjs').toString(), 
 	"Generated Command Grammar does not match expected Command Grammar")
 
@@ -20,7 +20,7 @@ let preprocessed = index.preprocess(fs.readFileSync('./test/testScript.txt').toS
 fs.writeFileSync('./test/output.txt', preprocessed)
 
 //make sure the output of parsing for indentation is what we expect
-assert(
+console.assert(
 	preprocessed == fs.readFileSync('./test/expectedIndentationOutput.txt'),
 	"Preprocessed indentation does not match indentation")
 
@@ -31,8 +31,6 @@ let parsed = index.parse(
 	fs.readFileSync('./test/testScript.txt').toString())
 
 //make sure the final output matches what is expected
-assert(
+console.assert(
 	parsed == fs.readFileSync("./test/expectedFinalOutput.txt"), 
 	"Parsed output does not match expected output")
-
-console.log("Output is correct!")
