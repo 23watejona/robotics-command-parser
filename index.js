@@ -37,6 +37,7 @@ export function parse(name, ...scripts) {
     let parsedMethods = []
 	for(let script of scripts){
 		let indentParsedScript = preprocess(script)
+		console.log(indentParsedScript)
 		parsedMethods = parsedMethods.concat(parseToCommands(indentParsedScript))
 	}
 	let res = `public class ${name}{`
