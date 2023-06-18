@@ -68,6 +68,11 @@ export function preprocess(script) {
 }
 
 export function parseToCommands(indentParsedScript) {
+	if(parserCommand == undefined){
+		console.error("Command Grammar not set\nYou must run 'setGrammar()' before parsing")
+	}
+	
+	
     try {
         //parse script into java commands
         //NOTE: must be preprocessed for indentation
