@@ -21,13 +21,12 @@ export function setGrammar(commandGrammar) {
 }
 
 
-export function generateGrammar(commandList, functionList) {
+export function generateGrammar(commandList) {
 	//parse the JSONs
 	commandList = JSON.parse(commandList)
-	functionList = JSON.parse(functionList)
 	
 	//Generate the grammar
-	return grammarGenerator.generateGrammar(commandList, functionList)
+	return grammarGenerator.generateGrammar(commandList.commands, commandList.functions)
 }
 
 export function parse(name, ...scripts) {

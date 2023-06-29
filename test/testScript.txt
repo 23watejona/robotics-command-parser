@@ -92,7 +92,6 @@ getOuttakePieceCommand
 		gripper WheelGripperPosition.OUTTAKE
 		wait 0.5
 		gripper WheelGripperPosition.STOP
-
 getALittleCloser() 
 	java*{
 		double limelightz = Math.abs(AprilTagSubsystem.get().m_z);
@@ -115,7 +114,6 @@ getALittleCloser()
 				new TurnCommand(Math.toDegrees(turnAngle2)));
 
 	}*
-
 getAnvitaAuto() 
 java*{
 	return new DeferredCommandAuto(() -> getALittleCloser());

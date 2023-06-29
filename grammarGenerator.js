@@ -83,16 +83,21 @@ function createCommandToken(commandFullName, commandObject){
 	
 	//generate a command token based on the template
 	let scriptingName = commandObject.name
-	let parameters = Object.keys(commandObject.parameters)
-	
+	let parameters = commandObject.parameters
+
+	let parameterLabels = []
+	// For each parameter, create a label that's indexed, starting at one
+	for (let index = 1; index < parameters.length + 1; index++) {
+		parameterLabels.push(`p${index}`)
+	}
 	
 	//format = p1:p etc
-	let firstLineParameters = parameters.map((x)=>{
+	let firstLineParameters = parameterLabels.map((x)=>{
 		return x + ":p"
 	})
 	
 	//format ends up as +p... for each
-	let returnParameters = parameters.map((x)=>{
+	let returnParameters = parameterLabels.map((x)=>{
 		return "+" + x 
 	})
 	
