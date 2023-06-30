@@ -32,9 +32,9 @@
     },
     "ArmScoreCommand": {
       "name": "armScore",
-      "prefix": "ArmPosition",
       "parameters": [
         {
+          "prefix": "ArmPosition",
           "name": "Arm Position",
           "description": "Arm Position",
           "type": "select",
@@ -58,9 +58,9 @@
     },
     "ArmScoreAutoCommand": {
       "name": "armAuto",
-      "prefix": "ArmScoreAutoCommand.ArmPosition",
       "parameters": [
         {
+          "prefix": "ArmScoreAutoCommand.ArmPosition",
           "name": "Arm Position",
           "description": "Arm Position",
           "type": "select",
@@ -148,9 +148,9 @@
     },
     "WheelGripperCommand": {
       "name": "gripper",
-      "prefix": "WheelGripperPosition",
       "parameters": [
         {
+          "prefix": "WheelGripperPosition",
           "name": "Gripper Action",
           "description": "Gripper Action",
           "type": "select",
