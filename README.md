@@ -106,9 +106,9 @@ To generate a grammar, the function accepts 1 parameter, a Command and Method Li
 
 ### The Command and Method List
 
-There are two top-level keys, both of which contain objects, `commands` and `methods`
-Each command is defined as an entry in the `commands` object
-The key for the command entry is the full name of the command
+There are two top-level keys, both of which contain objects, `commands` and `methods`  
+Each command is defined as an entry in the `commands` object  
+The key for the command entry is the full name of the command  
 The command entry is an object with entries as follows
 
 - Required
