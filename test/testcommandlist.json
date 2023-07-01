@@ -19,13 +19,13 @@
           "type": "javaObject"
         },
         {
-          "name": "",
-          "description": "",
+          "name": "Distance Threshold",
+          "description": "distance threshold in meters",
           "type": "number"
         },
         {
-          "name": "",
-          "description": "",
+          "name": "angle threshold",
+          "description": "angle threshold in degrees",
           "type": "number"
         }
       ]
