@@ -4,10 +4,9 @@ export function parse(str, includeComments = false){
 		javaBlock: "java\\*{([\\s\\S]*?)}\\*",
 		multiLineComment: "\\/\\*[\\s\\S]*?\\*\\/",
 		singleLineComment: "\\/\\/[^\\n]*",
+		newline: "(\n)|(\r\n)",
 		indent: "((?<=\\n)\\s+)|(^\\s+)",
-		trailingWhitespace:"\\s+(?=[\n])",
-		newline: "(\n)|(\r\n)"//,
-		//text:"[^\\s]+"
+		trailingWhitespace:"\\s+(?=[\n])"
 	}
 
 	//initialize an array to store our full output
