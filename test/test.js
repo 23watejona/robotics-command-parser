@@ -1,15 +1,14 @@
 import index from '../index.js'
 import fs from 'fs'
-import assert from 'node:assert/strict';
 
 //generate a grammar from our command and function lists
 let generatedGrammar = index.generateGrammar(
-	fs.readFileSync("./test/testCommandList.json"), 
+	fs.readFileSync("./test/testCommandList.json"),
 	fs.readFileSync("./test/testFunctionList.json"))
-	
+
 //make sure that our grammar matches what we expect
 console.assert(
-	generatedGrammar == fs.readFileSync('./test/expectedCommandGrammar.pegjs').toString(), 
+	generatedGrammar == fs.readFileSync('./test/expectedCommandGrammar.pegjs').toString(),
 	"Generated Command Grammar does not match expected Command Grammar")
 
 //set the grammar so we can use it to parse
@@ -26,11 +25,11 @@ console.assert(
 
 //parse our final output from our script(x2)
 let parsed = index.parse(
-	"CommandComposer", 
-	fs.readFileSync('./test/testScript.txt').toString(),  
+	"CommandComposer",
+	fs.readFileSync('./test/testScript.txt').toString(),
 	fs.readFileSync('./test/testScript.txt').toString())
 
 //make sure the final output matches what is expected
 console.assert(
-	parsed == fs.readFileSync("./test/expectedFinalOutput.txt"), 
+	parsed == fs.readFileSync("./test/expectedFinalOutput.txt"),
 	"Parsed output does not match expected output")

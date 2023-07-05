@@ -1,6 +1,3 @@
-
-
-import fs from 'fs'
 import pegjs from 'pegjs'
 import indentParser from './parseIndentation.js'
 import grammarGenerator from './grammarGenerator.js'
@@ -12,22 +9,22 @@ export function setGrammar(commandGrammar) {
         //generate parser from grammar and store in module scope
         parserCommand = pegjs.generate(commandGrammar)
     } catch (e) {
-		//error handling for grammar generation
-		//will come here if there are syntax errors in the grammar
-		console.error("FAILED TO SET GRAMMAR")
-		console.error(e)
+        //error handling for grammar generation
+        //will come here if there are syntax errors in the grammar
+        console.error("FAILED TO SET GRAMMAR")
+        console.error(e)
         e.location !== undefined ? "Line " + e.location.start.line + ", column " + e.location.start.column + ": " + e.message : e.message;
     }
 }
 
 
 export function generateGrammar(commandList, functionList) {
-	//parse the JSONs
-	commandList = JSON.parse(commandList)
-	functionList = JSON.parse(functionList)
-	
-	//Generate the grammar
-	return grammarGenerator.generateGrammar(commandList.commands, functionList)
+    //parse the JSONs
+    commandList = JSON.parse(commandList)
+    functionList = JSON.parse(functionList)
+
+    //Generate the grammar
+    return grammarGenerator.generateGrammar(commandList.commands, functionList)
 }
 
 export function parse(name, ...scripts) {
@@ -35,16 +32,16 @@ export function parse(name, ...scripts) {
     //return results
     //FORMAT: array of the static methods described in the script
     let parsedMethods = []
-	for(let script of scripts){
-		let indentParsedScript = preprocess(script)
-		parsedMethods = parsedMethods.concat(parseToCommands(indentParsedScript))
-	}
-	let res = `public class ${name}{`
-	for(let content of parsedMethods){
-		res+=content
-	}
-	res+="}"
-	return res
+    for (let script of scripts) {
+        let indentParsedScript = preprocess(script)
+        parsedMethods = parsedMethods.concat(parseToCommands(indentParsedScript))
+    }
+    let res = `public class ${name}{`
+    for (let content of parsedMethods) {
+        res += content
+    }
+    res += "}"
+    return res
 }
 
 
@@ -61,18 +58,17 @@ export function preprocess(script) {
     } catch (e) {
         //Error handling
         console.error("INDENTATION ERROR")
-		console.error(e)
+        console.error(e)
         return
     }
     return parsedScript
 }
 
 export function parseToCommands(indentParsedScript) {
-	if(parserCommand == undefined){
-		console.error("Command Grammar not set\nYou must run 'setGrammar()' before parsing")
-	}
-	
-	
+    if (parserCommand == undefined) {
+        console.error("Command Grammar not set\nYou must run 'setGrammar()' before parsing")
+    }
+
     try {
         //parse script into java commands
         //NOTE: must be preprocessed for indentation
@@ -82,10 +78,10 @@ export function parseToCommands(indentParsedScript) {
         //error handling
         //line numbers on errors are very likely wrong - I didn't put the time into figuring this out all the way
         if (e.location == undefined) {
-			console.error("COMMAND PARSING ERROR")
-			console.error(e)
+            console.error("COMMAND PARSING ERROR")
+            console.error(e)
         } else {
-            
+
             console.error(e)
         }
     }
