@@ -106,9 +106,8 @@ To generate a grammar, the function accepts 2 parameters, a Command list and a M
 
 ### The Command List
 
-The list starts with a top level `commands` key, which has an object value
-Each command is defined as an entry in the `commands` object  
-The key for the command entry is the full name of the command  
+Each command is defined as an entry in the JSON Command List
+The key for the command entry is the full name of the command
 The command entry is an object with entries as follows
 
 - Required
@@ -132,93 +131,91 @@ The command entry is an object with entries as follows
 
 ```json
 {
-	"commands": {
-		"WaitCommand": {
-			"name": "wait",
-			"parameters": [
-				{
-					"name": "Time",
-					"description": "Wait time in seconds",
-					"type": "number"
-				}
-			]
-		},
-		"AutoAlignmentCommand": {
-			"name": "autoAlign",
-			"parameters": [
-				{
-					"name": "Target Pose",
-					"description": "Target Pose",
-					"type": "javaObject"
-				},
-				{
-					"name": "Distance Threshold",
-					"description": "distance threshold in meters",
-					"type": "number"
-				},
-				{
-					"name": "angle threshold",
-					"description": "angle threshold in degrees",
-					"type": "number"
-				}
-			]
-		},
-		"ArmScoreCommand": {
-			"name": "armScore",
-			"parameters": [
-				{
-					"prefix": "ArmPosition",
-					"name": "Arm Position",
-					"description": "Arm Position",
-					"type": "select",
-					"options": [
-						"HIGH",
-						"HIGH_BACK",
-						"MEDIUM_FORWARD",
-						"MEDIUM_BACK",
-						"LOW",
-						"POCKET",
-						"SUBSTATION",
-						"TO_BACK_INTERMEDIATE",
-						"TO_FORWARD_INTERMEDIATE",
-						"HIGH_INTERMEDIATE",
-						"POCKET_INTERMEDIATE",
-						"SETTLE_POSITION",
-						"HOLD"
-					]
-				}
-			]
-		},
-		"ArmScoreAutoCommand": {
-			"name": "armAuto",
-			"parameters": [
-				{
-					"prefix": "ArmScoreAutoCommand.ArmPosition",
-					"name": "Arm Position",
-					"description": "Arm Position",
-					"type": "select",
-					"options": [
-						"HIGH",
-						"HIGH_BACK",
-						"MEDIUM_FORWARD",
-						"MEDIUM_BACK",
-						"LOW",
-						"POCKET",
-						"SUBSTATION",
-						"TO_BACK_INTERMEDIATE",
-						"TO_FORWARD_INTERMEDIATE",
-						"HIGH_INTERMEDIATE",
-						"POCKET_INTERMEDIATE",
-						"SETTLE_POSITION",
-						"HOLD"
-					]
-				}
-			]
-		},
-		"BalancePIDCommand": {
-			"name": "balance",
-			"parameters": []
-		}
+	"WaitCommand": {
+		"name": "wait",
+		"parameters": [
+			{
+				"name": "Time",
+				"description": "Wait time in seconds",
+				"type": "number"
+			}
+		]
+	},
+	"AutoAlignmentCommand": {
+		"name": "autoAlign",
+		"parameters": [
+			{
+				"name": "Target Pose",
+				"description": "Target Pose",
+				"type": "javaObject"
+			},
+			{
+				"name": "Distance Threshold",
+				"description": "distance threshold in meters",
+				"type": "number"
+			},
+			{
+				"name": "angle threshold",
+				"description": "angle threshold in degrees",
+				"type": "number"
+			}
+		]
+	},
+	"ArmScoreCommand": {
+		"name": "armScore",
+		"parameters": [
+			{
+				"prefix": "ArmPosition",
+				"name": "Arm Position",
+				"description": "Arm Position",
+				"type": "select",
+				"options": [
+					"HIGH",
+					"HIGH_BACK",
+					"MEDIUM_FORWARD",
+					"MEDIUM_BACK",
+					"LOW",
+					"POCKET",
+					"SUBSTATION",
+					"TO_BACK_INTERMEDIATE",
+					"TO_FORWARD_INTERMEDIATE",
+					"HIGH_INTERMEDIATE",
+					"POCKET_INTERMEDIATE",
+					"SETTLE_POSITION",
+					"HOLD"
+				]
+			}
+		]
+	},
+	"ArmScoreAutoCommand": {
+		"name": "armAuto",
+		"parameters": [
+			{
+				"prefix": "ArmScoreAutoCommand.ArmPosition",
+				"name": "Arm Position",
+				"description": "Arm Position",
+				"type": "select",
+				"options": [
+					"HIGH",
+					"HIGH_BACK",
+					"MEDIUM_FORWARD",
+					"MEDIUM_BACK",
+					"LOW",
+					"POCKET",
+					"SUBSTATION",
+					"TO_BACK_INTERMEDIATE",
+					"TO_FORWARD_INTERMEDIATE",
+					"HIGH_INTERMEDIATE",
+					"POCKET_INTERMEDIATE",
+					"SETTLE_POSITION",
+					"HOLD"
+				]
+			}
+		]
+	},
+	"BalancePIDCommand": {
+		"name": "balance",
+		"parameters": []
 	}
 }
 ```

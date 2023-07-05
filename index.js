@@ -24,7 +24,7 @@ export function generateGrammar(commandList, functionList) {
     functionList = JSON.parse(functionList)
 
     //Generate the grammar
-    return grammarGenerator.generateGrammar(commandList.commands, functionList)
+    return grammarGenerator.generateGrammar(commandList, functionList)
 }
 
 export function parse(name, ...scripts) {

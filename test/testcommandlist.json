@@ -1,168 +1,166 @@
 {
-  "commands": {
-    "WaitCommand": {
-      "name": "wait",
-      "parameters": [
-        {
-          "name": "Time",
-          "description": "Wait time in seconds",
-          "type": "number"
-        }
-      ]
-    },
-    "AutoAlignmentCommand": {
-      "name": "autoAlign",
-      "parameters": [
-        {
-          "name": "Target Pose",
-          "description": "Target Pose",
-          "type": "javaObject"
-        },
-        {
-          "name": "Distance Threshold",
-          "description": "distance threshold in meters",
-          "type": "number"
-        },
-        {
-          "name": "angle threshold",
-          "description": "angle threshold in degrees",
-          "type": "number"
-        }
-      ]
-    },
-    "ArmScoreCommand": {
-      "name": "armScore",
-      "parameters": [
-        {
-          "prefix": "ArmPosition",
-          "name": "Arm Position",
-          "description": "Arm Position",
-          "type": "select",
-          "options": [
-            "HIGH",
-            "HIGH_BACK",
-            "MEDIUM_FORWARD",
-            "MEDIUM_BACK",
-            "LOW",
-            "POCKET",
-            "SUBSTATION",
-            "TO_BACK_INTERMEDIATE",
-            "TO_FORWARD_INTERMEDIATE",
-            "HIGH_INTERMEDIATE",
-            "POCKET_INTERMEDIATE",
-            "SETTLE_POSITION",
-            "HOLD"
-          ]
-        }
-      ]
-    },
-    "ArmScoreAutoCommand": {
-      "name": "armAuto",
-      "parameters": [
-        {
-          "prefix": "ArmScoreAutoCommand.ArmPosition",
-          "name": "Arm Position",
-          "description": "Arm Position",
-          "type": "select",
-          "options": [
-            "HIGH",
-            "HIGH_BACK",
-            "MEDIUM_FORWARD",
-            "MEDIUM_BACK",
-            "LOW",
-            "POCKET",
-            "SUBSTATION",
-            "TO_BACK_INTERMEDIATE",
-            "TO_FORWARD_INTERMEDIATE",
-            "HIGH_INTERMEDIATE",
-            "POCKET_INTERMEDIATE",
-            "SETTLE_POSITION",
-            "HOLD"
-          ]
-        }
-      ]
-    },
-    "BalancePIDCommand": {
-      "name": "balance",
-      "parameters": []
-    },
-    "DriveDistanceCommand": {
-      "name": "driveDistance",
-      "parameters": [
-        {
-          "name": "distance",
-          "description": "distance in meters",
-          "type": "number"
-        }
-      ]
-    },
-    "DriveTimeCommand": {
-      "name": "driveTime",
-      "parameters": [
-        {
-          "name": "drive speed",
-          "description": "speed to drive(% output)",
-          "type": "number"
-        },
-        {
-          "name": "drive time",
-          "description": "time to drive(ms)",
-          "type": "number"
-        }
-      ]
-    },
-    "TurnCommand": {
-      "name": "turn",
-      "parameters": [
-        {
-          "name": "turn angle",
-          "description": "absolute angle to turn to",
-          "type": "number"
-        }
-      ]
-    },
-    "TurnRelativeCommand": {
-      "name": "turnRelative",
-      "parameters": [
-        {
-          "name": "turn angle",
-          "description": "relative angle to turn",
-          "type": "number"
-        }
-      ]
-    },
-    "TurnTimeCommand": {
-      "name": "turnTime",
-      "parameters": [
-        {
-          "name": "turn speed",
-          "description": "speed to turn(% output)",
-          "type": "number"
-        },
-        {
-          "name": "turn time",
-          "description": "time to turn(ms)",
-          "type": "number"
-        }
-      ]
-    },
-    "WheelGripperCommand": {
-      "name": "gripper",
-      "parameters": [
-        {
-          "prefix": "WheelGripperPosition",
-          "name": "Gripper Action",
-          "description": "Gripper Action",
-          "type": "select",
-          "options": [
-            "INTAKE",
-            "OUTTAKE",
-            "SLOW_OUTTAKE",
-            "STOP",
-            "INTAKE_CUBE_W_SENSOR"
-          ]
-        }
-      ]
-    }
+  "WaitCommand": {
+    "name": "wait",
+    "parameters": [
+      {
+        "name": "Time",
+        "description": "Wait time in seconds",
+        "type": "number"
+      }
+    ]
+  },
+  "AutoAlignmentCommand": {
+    "name": "autoAlign",
+    "parameters": [
+      {
+        "name": "Target Pose",
+        "description": "Target Pose",
+        "type": "javaObject"
+      },
+      {
+        "name": "Distance Threshold",
+        "description": "distance threshold in meters",
+        "type": "number"
+      },
+      {
+        "name": "angle threshold",
+        "description": "angle threshold in degrees",
+        "type": "number"
+      }
+    ]
+  },
+  "ArmScoreCommand": {
+    "name": "armScore",
+    "parameters": [
+      {
+        "prefix": "ArmPosition",
+        "name": "Arm Position",
+        "description": "Arm Position",
+        "type": "select",
+        "options": [
+          "HIGH",
+          "HIGH_BACK",
+          "MEDIUM_FORWARD",
+          "MEDIUM_BACK",
+          "LOW",
+          "POCKET",
+          "SUBSTATION",
+          "TO_BACK_INTERMEDIATE",
+          "TO_FORWARD_INTERMEDIATE",
+          "HIGH_INTERMEDIATE",
+          "POCKET_INTERMEDIATE",
+          "SETTLE_POSITION",
+          "HOLD"
+        ]
+      }
+    ]
+  },
+  "ArmScoreAutoCommand": {
+    "name": "armAuto",
+    "parameters": [
+      {
+        "prefix": "ArmScoreAutoCommand.ArmPosition",
+        "name": "Arm Position",
+        "description": "Arm Position",
+        "type": "select",
+        "options": [
+          "HIGH",
+          "HIGH_BACK",
+          "MEDIUM_FORWARD",
+          "MEDIUM_BACK",
+          "LOW",
+          "POCKET",
+          "SUBSTATION",
+          "TO_BACK_INTERMEDIATE",
+          "TO_FORWARD_INTERMEDIATE",
+          "HIGH_INTERMEDIATE",
+          "POCKET_INTERMEDIATE",
+          "SETTLE_POSITION",
+          "HOLD"
+        ]
+      }
+    ]
+  },
+  "BalancePIDCommand": {
+    "name": "balance",
+    "parameters": []
+  },
+  "DriveDistanceCommand": {
+    "name": "driveDistance",
+    "parameters": [
+      {
+        "name": "distance",
+        "description": "distance in meters",
+        "type": "number"
+      }
+    ]
+  },
+  "DriveTimeCommand": {
+    "name": "driveTime",
+    "parameters": [
+      {
+        "name": "drive speed",
+        "description": "speed to drive(% output)",
+        "type": "number"
+      },
+      {
+        "name": "drive time",
+        "description": "time to drive(ms)",
+        "type": "number"
+      }
+    ]
+  },
+  "TurnCommand": {
+    "name": "turn",
+    "parameters": [
+      {
+        "name": "turn angle",
+        "description": "absolute angle to turn to",
+        "type": "number"
+      }
+    ]
+  },
+  "TurnRelativeCommand": {
+    "name": "turnRelative",
+    "parameters": [
+      {
+        "name": "turn angle",
+        "description": "relative angle to turn",
+        "type": "number"
+      }
+    ]
+  },
+  "TurnTimeCommand": {
+    "name": "turnTime",
+    "parameters": [
+      {
+        "name": "turn speed",
+        "description": "speed to turn(% output)",
+        "type": "number"
+      },
+      {
+        "name": "turn time",
+        "description": "time to turn(ms)",
+        "type": "number"
+      }
+    ]
+  },
+  "WheelGripperCommand": {
+    "name": "gripper",
+    "parameters": [
+      {
+        "prefix": "WheelGripperPosition",
+        "name": "Gripper Action",
+        "description": "Gripper Action",
+        "type": "select",
+        "options": [
+          "INTAKE",
+          "OUTTAKE",
+          "SLOW_OUTTAKE",
+          "STOP",
+          "INTAKE_CUBE_W_SENSOR"
+        ]
+      }
+    ]
   }
 }
