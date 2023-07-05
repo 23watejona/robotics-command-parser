@@ -85,22 +85,16 @@ function createCommandToken(commandFullName, commandObject){
 	let scriptingName = commandObject.name
 	let parameters = commandObject.parameters
 
-	let parameterLabels = []
-	// For each parameter, create a label that's indexed, starting at one
+	let firstLineParameters = []
+	let returnParameters = []
+	// For each parameter, create a indexed label, starting at one
 	for (let index = 1; index < parameters.length + 1; index++) {
-		parameterLabels.push(`p${index}`)
+		//format = p1:p etc
+		firstLineParameters.push(`p${index}:p`)
+		//format ends up as +p... for each
+		returnParameters.push(`+p${index}`)
 	}
-	
-	//format = p1:p etc
-	let firstLineParameters = parameterLabels.map((x)=>{
-		return x + ":p"
-	})
-	
-	//format ends up as +p... for each
-	let returnParameters = parameterLabels.map((x)=>{
-		return "+" + x 
-	})
-	
+
 	//convert to text and change the delimiters between each of these items from commas to spaces
 	let firstLineParametersFormatted = firstLineParameters.join(" ")
 	
