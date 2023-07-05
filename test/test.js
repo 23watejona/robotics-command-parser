@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 
 //generate a grammar from our command and function lists
 let generatedGrammar = index.generateGrammar(
-	fs.readFileSync("./test/testCommandList.json"))
+	fs.readFileSync("./test/testCommandList.json"), 
+	fs.readFileSync("./test/testFunctionList.json"))
 	
 //make sure that our grammar matches what we expect
 console.assert(

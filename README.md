@@ -102,11 +102,11 @@ In this language, you can do that as well, by adding `with timeout {amt of time}
 
 ## Generating a grammar for your team's specific commands
 
-To generate a grammar, the function accepts 1 parameter, a Command and Method List
+To generate a grammar, the function accepts 2 parameters, a Command list and a Method list
 
-### The Command and Method List
+### The Command List
 
-There are two top-level keys, both of which contain objects, `commands` and `methods`  
+The list starts with a top level `commands` key, which has an object value
 Each command is defined as an entry in the `commands` object  
 The key for the command entry is the full name of the command  
 The command entry is an object with entries as follows
@@ -127,8 +127,6 @@ The command entry is an object with entries as follows
     such that the value of it ends up being something like 'ArmPosition.kHIGH'  
     This allows you to just put the option value as 'kHigh', and put the prefix,
     which is shared between all options, as 'ArmPosition'
-
-For methods, each method is an entry in the `methods` object. Each entry matches the format `"full method name": "scripting name"`
 
 #### Example Command List
 
@@ -221,12 +219,19 @@ For methods, each method is an entry in the `methods` object. Each entry matches
 			"name": "balance",
 			"parameters": []
 		}
-	},
-	"methods": {
-		"getEnsurePreloadCommand": "ensurePreload",
-		"getOuttakePieceCommand": "outtakePiece",
-		"getPickupPieceCommand": "pickupPiece"
 	}
+}
+```
+
+#### The Method List
+
+For methods, each method is an entry matching the format `"full method name": "scripting name"`
+
+```json
+{
+	"getEnsurePreloadCommand": "ensurePreload",
+	"getOuttakePieceCommand": "outtakePiece",
+	"getPickupPieceCommand": "pickupPiece"
 }
 ```
 
