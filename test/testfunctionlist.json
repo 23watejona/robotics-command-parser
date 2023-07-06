@@ -1,5 +1,5 @@
 {
-	"getEnsurePreloadCommand":	"ensurePreload",
-	"getOuttakePieceCommand":"outtakePiece",
-	"getPickupPieceCommand":"pickupPiece"
+  "getEnsurePreloadCommand": "ensurePreload",
+  "getOuttakePieceCommand": "outtakePiece",
+  "getPickupPieceCommand": "pickupPiece"
 }

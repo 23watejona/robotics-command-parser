@@ -1,166 +1,166 @@
 {
   "WaitCommand": {
-	"name": "wait",
-	"parameters": {
-		"p1":{
-			"name":"Time",
-			"description": "Wait time in seconds",
-			"type":"number"
-		}
-	}
+    "name": "wait",
+    "parameters": [
+      {
+        "name": "Time",
+        "description": "Wait time in seconds",
+        "type": "number"
+      }
+    ]
   },
-  "AutoAlignmentCommand":{
-	"name":"autoAlign",
-	"parameters":{
-		"p1":{
-			"name":"Target Pose",
-			"description":"Target Pose",
-			"type":"javaObject"
-		},
-		"p2":{
-			"name":"",
-			"description":"",
-			"type":"number"
-		},
-		"p3":{
-			"name":"",
-			"description":"",
-			"type":"number"
-		}
-	}
+  "AutoAlignmentCommand": {
+    "name": "autoAlign",
+    "parameters": [
+      {
+        "name": "Target Pose",
+        "description": "Target Pose",
+        "type": "javaObject"
+      },
+      {
+        "name": "Distance Threshold",
+        "description": "distance threshold in meters",
+        "type": "number"
+      },
+      {
+        "name": "angle threshold",
+        "description": "angle threshold in degrees",
+        "type": "number"
+      }
+    ]
   },
   "ArmScoreCommand": {
     "name": "armScore",
-    "prefix": "ArmPosition",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
+        "prefix": "ArmPosition",
         "name": "Arm Position",
         "description": "Arm Position",
         "type": "select",
-        "options": {
-          "opt1": "HIGH",
-          "opt2": "HIGH_BACK",
-          "opt3": "MEDIUM_FORWARD",
-          "opt4": "MEDIUM_BACK",
-          "opt5": "LOW",
-          "opt6": "POCKET",
-          "opt7": "SUBSTATION",
-          "opt8": "TO_BACK_INTERMEDIATE",
-          "opt9": "TO_FORWARD_INTERMEDIATE",
-          "opt10": "HIGH_INTERMEDIATE",
-          "opt11": "POCKET_INTERMEDIATE",
-          "opt12": "SETTLE_POSITION",
-          "opt13": "HOLD"
-        }
+        "options": [
+          "HIGH",
+          "HIGH_BACK",
+          "MEDIUM_FORWARD",
+          "MEDIUM_BACK",
+          "LOW",
+          "POCKET",
+          "SUBSTATION",
+          "TO_BACK_INTERMEDIATE",
+          "TO_FORWARD_INTERMEDIATE",
+          "HIGH_INTERMEDIATE",
+          "POCKET_INTERMEDIATE",
+          "SETTLE_POSITION",
+          "HOLD"
+        ]
       }
-    }
+    ]
   },
-    "ArmScoreAutoCommand": {
+  "ArmScoreAutoCommand": {
     "name": "armAuto",
-    "prefix": "ArmScoreAutoCommand.ArmPosition",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
+        "prefix": "ArmScoreAutoCommand.ArmPosition",
         "name": "Arm Position",
         "description": "Arm Position",
         "type": "select",
-        "options": {
-          "opt1": "HIGH",
-          "opt2": "HIGH_BACK",
-          "opt3": "MEDIUM_FORWARD",
-          "opt4": "MEDIUM_BACK",
-          "opt5": "LOW",
-          "opt6": "POCKET",
-          "opt7": "SUBSTATION",
-          "opt8": "TO_BACK_INTERMEDIATE",
-          "opt9": "TO_FORWARD_INTERMEDIATE",
-          "opt10": "HIGH_INTERMEDIATE",
-          "opt11": "POCKET_INTERMEDIATE",
-          "opt12": "SETTLE_POSITION",
-          "opt13": "HOLD"
-        }
+        "options": [
+          "HIGH",
+          "HIGH_BACK",
+          "MEDIUM_FORWARD",
+          "MEDIUM_BACK",
+          "LOW",
+          "POCKET",
+          "SUBSTATION",
+          "TO_BACK_INTERMEDIATE",
+          "TO_FORWARD_INTERMEDIATE",
+          "HIGH_INTERMEDIATE",
+          "POCKET_INTERMEDIATE",
+          "SETTLE_POSITION",
+          "HOLD"
+        ]
       }
-    }
+    ]
   },
-   "BalancePIDCommand": {
+  "BalancePIDCommand": {
     "name": "balance",
-    "parameters": {}
+    "parameters": []
   },
   "DriveDistanceCommand": {
     "name": "driveDistance",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
         "name": "distance",
         "description": "distance in meters",
         "type": "number"
       }
-    }
+    ]
   },
   "DriveTimeCommand": {
     "name": "driveTime",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
         "name": "drive speed",
         "description": "speed to drive(% output)",
         "type": "number"
       },
-      "p2": {
+      {
         "name": "drive time",
         "description": "time to drive(ms)",
         "type": "number"
       }
-    }
+    ]
   },
   "TurnCommand": {
     "name": "turn",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
         "name": "turn angle",
         "description": "absolute angle to turn to",
         "type": "number"
       }
-    }
+    ]
   },
   "TurnRelativeCommand": {
     "name": "turnRelative",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
         "name": "turn angle",
         "description": "relative angle to turn",
         "type": "number"
       }
-    }
+    ]
   },
   "TurnTimeCommand": {
     "name": "turnTime",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
         "name": "turn speed",
         "description": "speed to turn(% output)",
         "type": "number"
       },
-      "p2": {
+      {
         "name": "turn time",
         "description": "time to turn(ms)",
         "type": "number"
       }
-    }
+    ]
   },
   "WheelGripperCommand": {
     "name": "gripper",
-    "prefix": "WheelGripperPosition",
-    "parameters": {
-      "p1": {
+    "parameters": [
+      {
+        "prefix": "WheelGripperPosition",
         "name": "Gripper Action",
         "description": "Gripper Action",
         "type": "select",
-        "options": {
-          "opt1": "INTAKE",
-          "opt2": "OUTTAKE",
-          "opt3": "SLOW_OUTTAKE",
-          "opt4": "STOP",
-          "opt5": "INTAKE_CUBE_W_SENSOR"
-        }
+        "options": [
+          "INTAKE",
+          "OUTTAKE",
+          "SLOW_OUTTAKE",
+          "STOP",
+          "INTAKE_CUBE_W_SENSOR"
+        ]
       }
-    }
+    ]
   }
 }
