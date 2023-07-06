@@ -239,8 +239,8 @@ Now that you know how to set everything up, it's time to start making some java!
 1. To start off, import the package into your file.
    - `const commandParseUtil = require('robotics-command-parser')`
 2. Next, generate a grammar based on your command list and function list.
-   - Parameter is commandList in JSON format
-   - `let generatedGrammar = commandParseUtil.generateGrammar(fs.readFileSync("./commandList.json"))`
+   - Parameters are: commandList, functionList in JSON format
+   - `let generatedGrammar = commandParseUtil.generateGrammar(fs.readFileSync("./commandList.json"), fs.readFileSync("./functionList.json"))`
 3. Set that as the grammar to use for parsing
    - `commandParseUtil.setGrammar(generatedGrammar)`
 4. Parse your script into java!
