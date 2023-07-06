@@ -3,8 +3,7 @@
 //Also takes in a list of all the functions we want to be able to parse for
 export function generateGrammar(commandList, functionList) {
 	//generate the grammar from the template
-	let generatedGrammar =
-		`file = first:(function/javafunction)+
+	let generatedGrammar = `file = first:(function/javafunction)+
 {
 	return first
 }
@@ -41,23 +40,22 @@ command = first:(${Object.keys(commandList).join("/")}) t:timeout?
 	return first + (t != null ? t : "")
 }
 ${(() => {
-			let res = ""
-			for (let i in commandList) {
-				res += createCommandToken(i, commandList[i])
-			}
-			return res
-		})()
-		}f'function' = first:(${Object.keys(functionList).join("/")}) t:timeout?
+	let res = "";
+	for (let i in commandList) {
+		res += createCommandToken(i, commandList[i]);
+	}
+	return res;
+})()}f'function' = first:(${Object.keys(functionList).join("/")}) t:timeout?
 {
 	return first + (t != null ? t : "")
 }
 ${(() => {
-			let res = ""
-			for (let i in functionList) {
-				res += createFunctionToken(i, functionList[i])
-			}
-			return res
-		})()}timeout = space "with timeout" space p:text
+	let res = "";
+	for (let i in functionList) {
+		res += createFunctionToken(i, functionList[i]);
+	}
+	return res;
+})()}timeout = space "with timeout" space p:text
 {
 	return ".withTimeout(" + p + ")"
 }
@@ -75,34 +73,33 @@ space = " "
 textnospace = s:[a-zA-Z0-9._-]* {return s.join("")}
 bracketed = "{" s:[^}]* "}" {return s.join("")}
 text = s:[^\\n]+ {return s.join("")}
-newline'new line' = "\\n" { return ""}`
-	return generatedGrammar
+newline'new line' = "\\n" { return ""}`;
+	return generatedGrammar;
 }
 
 function createCommandToken(commandFullName, commandObject) {
-
 	//generate a command token based on the template
-	let scriptingName = commandObject.name
-	let parameters = commandObject.parameters
+	let scriptingName = commandObject.name;
+	let parameters = commandObject.parameters;
 
 	// For each parameter, create a indexed label, starting at one
 	//format = p1:p etc
-	let firstLineParameters = parameters.map((param, index) => `p${index + 1}:p`)
+	let firstLineParameters = parameters.map((param, index) => `p${index + 1}:p`);
 	//format ends up as +p... for each
-	let returnParameters = parameters.map((param, index) => `+p${index + 1}`)
+	let returnParameters = parameters.map((param, index) => `+p${index + 1}`);
 
 	//convert to text and change the delimiters between each of these items from commas to spaces
-	let firstLineParametersFormatted = firstLineParameters.join(" ")
+	let firstLineParametersFormatted = firstLineParameters.join(" ");
 
 	//convert to text and change the delimiters from , to +","
-	let returnParametersFormatted = returnParameters.join('+","')
+	let returnParametersFormatted = returnParameters.join('+","');
 
 	let commandToken = `${commandFullName} = newline "${scriptingName}" ${firstLineParametersFormatted}
 {
 	return "new ${commandFullName}("${returnParametersFormatted}+")"
 }
-`
-	return commandToken
+`;
+	return commandToken;
 }
 
 function createFunctionToken(functionFullName, functionScriptingName) {
@@ -111,9 +108,9 @@ function createFunctionToken(functionFullName, functionScriptingName) {
 {
 	return "${functionFullName}()"
 }
-`
+`;
 }
 
 export default {
 	generateGrammar: generateGrammar
-}
+};
