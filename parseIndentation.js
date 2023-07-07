@@ -5,98 +5,105 @@ export function parse(str, includeComments = false){
 		multiLineComment: "\\/\\*[\\s\\S]*?\\*\\/",
 		singleLineComment: "\\/\\/[^\\n]*",
 		newline: "(\n)|(\r\n)",
-		indent: "((?<=\\n)\\s+)|(^\\s+)",
-		trailingWhitespace:"\\s+(?=[\n])"
+		whitespace: "[^\\S\\r\\n]+",
 	}
-
-	//initialize an array to store our full output
-
-	
-	
 	
 	let groupArray = []
-
 	for (let [token, expression] of Object.entries(tokens)){
 		groupArray.push(`(?<${token}>${expression})`)
 	}
 
 	let m = new RegExp(groupArray.join("|"), 'g')
 
-	let parsed = []	
 	let lastIndex = 0
 	let lastLength = 0
-	for(let match of str.matchAll(m)){	
+	let res = ""
+	let processor = processToken()
+	processor.next()
+
+	for(let match of str.matchAll(m)){
 		if(match.index - (lastIndex+lastLength) != 0){
-			parsed.push({tokenType:'text', content:str.substring(lastIndex+lastLength, match.index)})
+			try{
+				res = processor.next({type:'text', content:str.substring(lastIndex+lastLength, match.index)})
+			}catch(e){
+				e.message += " at line " + (str.substring(0, match.index).match(/\n/g).length + 1)
+				throw e
+			}
 		}
 		lastIndex = match.index
 		lastLength = match[0].length
-		for(let [g,s] of Object.entries(match.groups)){
-			if(s != undefined){
-				parsed.push({tokenType:g, content:s})
+		for(let [g, s] of Object.entries(match.groups)){
+			if(s){
+				try{
+					res = processor.next({type:g, content:s})
+				}catch(e){
+					e.message += " at line " + (str.substring(0, match.index+s.length+1).match(/\n/g).length + 1)
+					throw e
+				}
 			}
 		}
 	}
-	let res = ""
-	let indentBuff = []
+	return res.value
+}
+
+
+function* processToken(includeComments){
+	let output = ""
+	let lastType = null
+	let stlType = null
 	let lastIndent = ""
-	let lineCount = 1
-	
-	//now that we've separated everything, time to start making our output string
-	for(let i of parsed){
-		
+	let lastWhitespace = ""
+	while(true){
 		//separate out the type and the content of the token
-		let {tokenType, content} = i
-		
+		let {type, content} = yield output
 		//if it's a text token, we want to take the last we saw indentation token
 		//and compare it to the last indent token we processed with a text
 		//so we know if this is tabbed in, tabbed out, or the same as the last line
 		//of the script
 		//Once we know this, add an INDENT, DEDENT, or nothing, and then the text we
-		if(tokenType == "text"){
-			if(indentBuff.length > 0){
-				//console.log(content)
-				try{
-					//let a = []
-					//a.push(indentBuff[indentBuff.length-1], lastIndent)
-					//console.log(a)
-					res += processIndent(indentBuff[indentBuff.length-1], lastIndent) + "\n"
-				}catch(e){
-					console.error(e.message + " at line " + lineCount)
-					throw("ERROR IN PREPROCESSING")
-				}
-				lastIndent = indentBuff[indentBuff.length-1]
-				indentBuff = []
+		if(type == "text"){
+
+			if(stlType != null && lastType != null && lastType == "whitespace" && stlType == "text"){
+				output += lastWhitespace
+			} 
+
+			if(stlType != null && lastType != null && (stlType == "newline" || lastType == "newline")){
+				output += processIndent(lastWhitespace, lastIndent)
+				lastIndent = lastWhitespace
 			}
-			res += content + " " 
-		}else if(tokenType=="javaBlock"){
+
+			output += content
+		}else if(type=="javaBlock"){
 			//Surround with indent/dedent, strip single-line comments, and replace all non-required whitespace
-			res+="\nINDENT\n"+content.replaceAll(/\/\/.*/g,"").replaceAll(/(\t|\n|\r)/g,"").replaceAll("}*","")+"\nDEDENT\n"		
-		}else if(tokenType == "indent"){
+			output+="INDENT\n"+content.replaceAll(/\/\/.*/g,"").replaceAll(/(\t|\n|\r)/g,"").replaceAll("}*","")+"\nDEDENT"		
+		}else if(type == "whitespace"){
 			//add the indent to our buffer
 			//it's done like this since not every indent is necessarily used in the final script
 			//(comments etc)
-			indentBuff.push(content)
-		}else if(tokenType == "singleLineComment" || tokenType == "multiLineComment"){
+			lastWhitespace = content
+		}else if(type == "singleLineComment" || type == "multiLineComment"){
 			//add comments only if we want them to be included in the output
 			if(includeComments){
-				res += content + "\n"
+				output += content + "\n"
 			}
-			indentBuff = []
-		}else if(tokenType == "newline"){
+			continue;
+		}else if(type == "newline"){
 			//just add a newline
-			indentBuff.push('')
-			lineCount += 1
-			res += "\n"
+			lastWhitespace = ""
+			if(output.slice(-1) != "\n"){
+				output += "\n"
+			}
 		}
+		stlType = lastType
+		lastType = type
 	}
-	res += processIndent("", lastIndent) + "\n"
-	return res.replaceAll(/[\n]+/g,"\n").replaceAll(/\n$/g,"").replaceAll(/^\n+/g,"").replaceAll(/\s*(?=\n)/g, "")
 }
+
 
 //compare current number of tabs to last number of tabs
 //note that tabs are defined as either a tab character (\t) or 2 spaces (  )
 function processIndent(currIndent, lastIndent){
+
 	let tabRegex = new RegExp(/((\t)|([ ]{2}))/,'g')
 
 	let lastTabs = lastIndent.match(tabRegex)
@@ -108,18 +115,14 @@ function processIndent(currIndent, lastIndent){
 	let res = ""
 	currIndent = currIndent.replaceAll(tabRegex, '')
 	if(currIndent.replaceAll(tabRegex, '') != ''){
-		console.log("BAD INDENT")
-		throw('bad indentation')
+		throw new Error('BAD INDENTATION')
 	}
 
 	if(lastTabs < currTabs){
 		res += "INDENT\n".repeat(currTabs - lastTabs)
 	}else if(lastTabs > currTabs){
 		res += "DEDENT\n".repeat(lastTabs - currTabs)
-	}else{
-		res += "\n"
 	}
-	//console.log(res)
 	return res
 }
 
