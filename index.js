@@ -53,14 +53,7 @@ export function parse(name, ...scripts) {
 //This drastically simplifies what is necessary in the pegjs grammar
 //To actually generate the Java code later
 export function preprocess(script) {
-    try {
-        var parsedScript = indentParser.parse(script)
-    } catch (e) {
-        //Error handling
-        console.error("INDENTATION ERROR")
-        console.error(e)
-        return
-    }
+    var parsedScript = indentParser.parse(script)
     return parsedScript
 }
 
